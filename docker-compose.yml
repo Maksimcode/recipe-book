@@ -1,0 +1,45 @@
+services:
+  db:
+    image: postgres:16
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: recipe_book
+      POSTGRES_USER: recipe
+      POSTGRES_PASSWORD: recipe
+    ports:
+      - "5434:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U recipe -d recipe_book"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql://recipe:recipe@db:5432/recipe_book?schema=public
+      CHOKIDAR_USEPOLLING: "true"
+      WATCHPACK_POLLING: "true"
+      NEXT_TELEMETRY_DISABLED: "1"
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./:/app
+      - node_modules:/app/node_modules
+    command: >
+      sh -c "npm install &&
+             npx prisma generate &&
+             npx prisma db push &&
+             npm run dev -- --hostname 0.0.0.0 --webpack"
+
+volumes:
+  postgres_data:
+  node_modules:

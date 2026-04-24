@@ -1,0 +1,127 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum ProductCategory {
+  FROZEN
+  MEAT
+  VEGETABLES
+  GREENS
+  SPICES
+  GRAINS
+  CANNED
+  LIQUID
+  SWEETS
+}
+
+enum ProductCookingState {
+  READY_TO_EAT
+  SEMI_FINISHED
+  REQUIRES_COOKING
+}
+
+enum DishCategory {
+  DESSERT
+  FIRST
+  SECOND
+  DRINK
+  SALAD
+  SOUP
+  SNACK
+}
+
+model Product {
+  id                     String            @id @default(cuid())
+  name                   String
+  nameNormalized         String
+  caloriesPer100g        Decimal
+  proteinPer100g         Decimal
+  fatPer100g             Decimal
+  carbsPer100g           Decimal
+  ingredientsComposition String?
+  category               ProductCategory
+  cookingState           ProductCookingState
+  isVegan                Boolean           @default(false)
+  isGlutenFree           Boolean           @default(false)
+  isSugarFree            Boolean           @default(false)
+  createdAt              DateTime          @default(now())
+  updatedAt              DateTime?         @updatedAt
+
+  photos          ProductPhoto[]
+  dishIngredients DishIngredient[]
+
+  @@index([name])
+  @@index([nameNormalized])
+  @@index([category, cookingState, isVegan, isGlutenFree, isSugarFree])
+}
+
+model ProductPhoto {
+  id        String   @id @default(cuid())
+  productId String
+  photoUrl  String
+  sortOrder Int      @default(0)
+  createdAt DateTime @default(now())
+
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@index([productId, sortOrder])
+}
+
+model Dish {
+  id                        String           @id @default(cuid())
+  name                      String
+  nameNormalized            String
+  caloriesPerPortion        Decimal
+  proteinPerPortion         Decimal
+  fatPerPortion             Decimal
+  carbsPerPortion           Decimal
+  portionSizeGrams          Decimal
+  category                  DishCategory
+  isVegan                   Boolean          @default(false)
+  isGlutenFree              Boolean          @default(false)
+  isSugarFree               Boolean          @default(false)
+  isNutritionManuallyEdited Boolean          @default(false)
+  createdAt                 DateTime         @default(now())
+  updatedAt                 DateTime?        @updatedAt
+  ingredients               DishIngredient[]
+  photos                    DishPhoto[]
+
+  @@index([name])
+  @@index([nameNormalized])
+  @@index([category, isVegan, isGlutenFree, isSugarFree])
+}
+
+model DishPhoto {
+  id        String   @id @default(cuid())
+  dishId    String
+  photoUrl  String
+  sortOrder Int      @default(0)
+  createdAt DateTime @default(now())
+
+  dish Dish @relation(fields: [dishId], references: [id], onDelete: Cascade)
+
+  @@index([dishId, sortOrder])
+}
+
+model DishIngredient {
+  id        String   @id @default(cuid())
+  dishId    String
+  productId String
+  grams     Decimal
+  createdAt DateTime @default(now())
+
+  dish    Dish    @relation(fields: [dishId], references: [id], onDelete: Cascade)
+  product Product @relation(fields: [productId], references: [id], onDelete: Restrict)
+
+  @@unique([dishId, productId])
+  @@index([productId, dishId])
+}

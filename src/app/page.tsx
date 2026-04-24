@@ -1,65 +1,74 @@
-import Image from "next/image";
+import Link from "next/link";
 
 export default function Home() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+    <main className="container landing">
+      <section className="hero panel">
+        <div>
+          <span className="chip">Удобная кулинарная база</span>
+          <h1>Книга рецептов для ежедневного планирования рациона</h1>
+          <p className="text-muted">
+            Храни продукты, собирай блюда из ингредиентов и получай авторасчет КБЖУ. Сервис
+            помогает держать меню структурированным и понятным.
           </p>
+          <div className="action-row">
+            <Link className="btn-primary" href="/products/new">
+              Добавить продукт
+            </Link>
+            <Link className="btn-secondary" href="/dishes/new">
+              Создать блюдо
+            </Link>
+          </div>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+        <div className="hero-art">
+          <Link className="hero-badge hero-badge-link" href="/products">
+            <img src="/icons/products.svg" alt="" aria-hidden="true" className="section-icon" />
+            <strong>Продукты</strong>
+            <span className="text-muted">Категории, флаги, фото</span>
+          </Link>
+          <Link className="hero-badge hero-badge-link" href="/dishes">
+            <img src="/icons/dishes.svg" alt="" aria-hidden="true" className="section-icon" />
+            <strong>Блюда</strong>
+            <span className="text-muted">Состав и КБЖУ</span>
+          </Link>
         </div>
-      </main>
-    </div>
+      </section>
+
+      <section className="feature-grid">
+        <article className="card feature-card">
+          <h3>Умные карточки продуктов</h3>
+          <p className="text-muted">
+            Учитывай БЖУ, фильтруй по категориям, готовности и диетическим флагам.
+          </p>
+          <div className="action-row">
+            <Link className="btn-secondary" href="/products">
+              Открыть список
+            </Link>
+          </div>
+        </article>
+        <article className="card feature-card">
+          <h3>Авторасчет КБЖУ блюд</h3>
+          <p className="text-muted">
+            Система считает пищевую ценность на порцию на основе реального состава ингредиентов.
+          </p>
+          <div className="action-row">
+            <Link className="btn-secondary" href="/dishes">
+              Перейти к блюдам
+            </Link>
+          </div>
+        </article>
+        <article className="card feature-card">
+          <h3>Фото из файла и буфера</h3>
+          <p className="text-muted">
+            Загружай изображения как удобно: с компьютера, вставкой из clipboard или ссылкой.
+          </p>
+          <div className="action-row">
+            <Link className="btn-secondary" href="/products/new">
+              Попробовать
+            </Link>
+          </div>
+        </article>
+      </section>
+    </main>
   );
 }
