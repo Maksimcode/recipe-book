@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 import { ApiClientError, apiRequest } from "@/lib/frontend/api";
+import { formatNumber } from "@/lib/frontend/format-number";
 import {
   getCategoryLabel,
   getCookingStateLabel,
@@ -188,19 +189,19 @@ export default function ProductsPage() {
             <div className="stats-grid">
               <div className="stat">
                 <div className="stat-label">Ккал</div>
-                <div className="stat-value">{item.caloriesPer100g}</div>
+                <div className="stat-value">{formatNumber(item.caloriesPer100g)}</div>
               </div>
               <div className="stat">
                 <div className="stat-label">Белки</div>
-                <div className="stat-value">{item.proteinPer100g}</div>
+                <div className="stat-value">{formatNumber(item.proteinPer100g)}</div>
               </div>
               <div className="stat">
                 <div className="stat-label">Жиры</div>
-                <div className="stat-value">{item.fatPer100g}</div>
+                <div className="stat-value">{formatNumber(item.fatPer100g)}</div>
               </div>
               <div className="stat">
                 <div className="stat-label">Углеводы</div>
-                <div className="stat-value">{item.carbsPer100g}</div>
+                <div className="stat-value">{formatNumber(item.carbsPer100g)}</div>
               </div>
             </div>
             <div className="chips-row">

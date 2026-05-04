@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 import { ApiClientError, apiRequest } from "@/lib/frontend/api";
+import { formatNumber } from "@/lib/frontend/format-number";
 import {
   dishCategoryOptions,
   getDishCategoryLabel,
@@ -154,38 +155,38 @@ export default function DishesPage() {
               <div className="stats-grid">
                 <div className="stat">
                   <div className="stat-label">Ккал</div>
-                  <div className="stat-value">{item.caloriesPerPortion}</div>
+                  <div className="stat-value">{formatNumber(item.caloriesPerPortion)}</div>
                 </div>
                 <div className="stat">
                   <div className="stat-label">Белки</div>
-                  <div className="stat-value">{item.proteinPerPortion}</div>
+                  <div className="stat-value">{formatNumber(item.proteinPerPortion)}</div>
                 </div>
                 <div className="stat">
                   <div className="stat-label">Жиры</div>
-                  <div className="stat-value">{item.fatPerPortion}</div>
+                  <div className="stat-value">{formatNumber(item.fatPerPortion)}</div>
                 </div>
                 <div className="stat">
                   <div className="stat-label">Углеводы</div>
-                  <div className="stat-value">{item.carbsPerPortion}</div>
+                  <div className="stat-value">{formatNumber(item.carbsPerPortion)}</div>
                 </div>
               </div>
               <p className="text-muted">На 100 г:</p>
               <div className="stats-grid">
                 <div className="stat">
                   <div className="stat-label">Ккал</div>
-                  <div className="stat-value">{per100g.caloriesPer100g}</div>
+                  <div className="stat-value">{formatNumber(per100g.caloriesPer100g)}</div>
                 </div>
                 <div className="stat">
                   <div className="stat-label">Белки</div>
-                  <div className="stat-value">{per100g.proteinPer100g}</div>
+                  <div className="stat-value">{formatNumber(per100g.proteinPer100g)}</div>
                 </div>
                 <div className="stat">
                   <div className="stat-label">Жиры</div>
-                  <div className="stat-value">{per100g.fatPer100g}</div>
+                  <div className="stat-value">{formatNumber(per100g.fatPer100g)}</div>
                 </div>
                 <div className="stat">
                   <div className="stat-label">Углеводы</div>
-                  <div className="stat-value">{per100g.carbsPer100g}</div>
+                  <div className="stat-value">{formatNumber(per100g.carbsPer100g)}</div>
                 </div>
               </div>
               <div className="chips-row">

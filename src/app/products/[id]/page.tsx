@@ -5,6 +5,7 @@ import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
 import { ApiClientError, apiRequest } from "@/lib/frontend/api";
+import { formatNumber } from "@/lib/frontend/format-number";
 import {
   getCategoryLabel,
   getCookingStateLabel,
@@ -32,6 +33,29 @@ export default function ProductDetailsPage() {
     }
     void load();
   }, [params.id]);
+
+  const createdAtLabel = item
+    ? new Date(item.createdAt).toLocaleString("ru-RU", {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+      })
+    : "";
+
+  const updatedAtLabel = item?.updatedAt
+    ? new Date(item.updatedAt).toLocaleString("ru-RU", {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+      })
+    : null;
+
+  const isActuallyEdited =
+    !!item?.updatedAt && Math.abs(new Date(item.updatedAt).getTime() - new Date(item.createdAt).getTime()) > 1000;
 
   return (
     <main className="container">
@@ -71,22 +95,28 @@ export default function ProductDetailsPage() {
               <p className="text-muted">
                 {getCategoryLabel(item.category)} • {getCookingStateLabel(item.cookingState)}
               </p>
+              <p className="text-muted">
+                Создано: {createdAtLabel}
+              </p>
+              {isActuallyEdited && updatedAtLabel ? (
+                <p className="text-muted">Отредактировано: {updatedAtLabel}</p>
+              ) : null}
               <div className="stats-grid">
                 <div className="stat">
                   <div className="stat-label">Ккал</div>
-                  <div className="stat-value">{item.caloriesPer100g}</div>
+                  <div className="stat-value">{formatNumber(item.caloriesPer100g)}</div>
                 </div>
                 <div className="stat">
                   <div className="stat-label">Белки</div>
-                  <div className="stat-value">{item.proteinPer100g}</div>
+                  <div className="stat-value">{formatNumber(item.proteinPer100g)}</div>
                 </div>
                 <div className="stat">
                   <div className="stat-label">Жиры</div>
-                  <div className="stat-value">{item.fatPer100g}</div>
+                  <div className="stat-value">{formatNumber(item.fatPer100g)}</div>
                 </div>
                 <div className="stat">
                   <div className="stat-label">Углеводы</div>
-                  <div className="stat-value">{item.carbsPer100g}</div>
+                  <div className="stat-value">{formatNumber(item.carbsPer100g)}</div>
                 </div>
               </div>
               <div className="meta-block">

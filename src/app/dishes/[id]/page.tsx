@@ -5,6 +5,7 @@ import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
 import { ApiClientError, apiRequest } from "@/lib/frontend/api";
+import { formatNumber } from "@/lib/frontend/format-number";
 import {
   getDishCategoryLabel,
   getDishPer100gNutrition,
@@ -43,6 +44,29 @@ export default function DishDetailsPage() {
       })
     : null;
 
+  const createdAtLabel = item
+    ? new Date(item.createdAt).toLocaleString("ru-RU", {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+      })
+    : "";
+
+  const updatedAtLabel = item?.updatedAt
+    ? new Date(item.updatedAt).toLocaleString("ru-RU", {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+      })
+    : null;
+
+  const isActuallyEdited =
+    !!item?.updatedAt && Math.abs(new Date(item.updatedAt).getTime() - new Date(item.createdAt).getTime()) > 1000;
+
   return (
     <main className="container">
       {loading ? <p>Загрузка...</p> : null}
@@ -79,42 +103,48 @@ export default function DishDetailsPage() {
 
             <section className="details-meta">
               <p className="text-muted">{getDishCategoryLabel(item.category)}</p>
+              <p className="text-muted">
+                Создано: {createdAtLabel}
+              </p>
+              {isActuallyEdited && updatedAtLabel ? (
+                <p className="text-muted">Отредактировано: {updatedAtLabel}</p>
+              ) : null}
               <p>Размер порции: {item.portionSizeGrams} г</p>
               <div className="stats-grid">
                 <div className="stat">
                   <div className="stat-label">Ккал</div>
-                  <div className="stat-value">{item.caloriesPerPortion}</div>
+                  <div className="stat-value">{formatNumber(item.caloriesPerPortion)}</div>
                 </div>
                 <div className="stat">
                   <div className="stat-label">Белки</div>
-                  <div className="stat-value">{item.proteinPerPortion}</div>
+                  <div className="stat-value">{formatNumber(item.proteinPerPortion)}</div>
                 </div>
                 <div className="stat">
                   <div className="stat-label">Жиры</div>
-                  <div className="stat-value">{item.fatPerPortion}</div>
+                  <div className="stat-value">{formatNumber(item.fatPerPortion)}</div>
                 </div>
                 <div className="stat">
                   <div className="stat-label">Углеводы</div>
-                  <div className="stat-value">{item.carbsPerPortion}</div>
+                  <div className="stat-value">{formatNumber(item.carbsPerPortion)}</div>
                 </div>
               </div>
               <p>На 100 г:</p>
               <div className="stats-grid">
                 <div className="stat">
                   <div className="stat-label">Ккал</div>
-                  <div className="stat-value">{per100g?.caloriesPer100g ?? 0}</div>
+                  <div className="stat-value">{formatNumber(per100g?.caloriesPer100g ?? 0)}</div>
                 </div>
                 <div className="stat">
                   <div className="stat-label">Белки</div>
-                  <div className="stat-value">{per100g?.proteinPer100g ?? 0}</div>
+                  <div className="stat-value">{formatNumber(per100g?.proteinPer100g ?? 0)}</div>
                 </div>
                 <div className="stat">
                   <div className="stat-label">Жиры</div>
-                  <div className="stat-value">{per100g?.fatPer100g ?? 0}</div>
+                  <div className="stat-value">{formatNumber(per100g?.fatPer100g ?? 0)}</div>
                 </div>
                 <div className="stat">
                   <div className="stat-label">Углеводы</div>
-                  <div className="stat-value">{per100g?.carbsPer100g ?? 0}</div>
+                  <div className="stat-value">{formatNumber(per100g?.carbsPer100g ?? 0)}</div>
                 </div>
               </div>
               <div className="chips-row">
