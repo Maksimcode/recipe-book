@@ -75,13 +75,13 @@ describe("PATCH /api/dishes/:id", () => {
     });
   });
 
-  describe("ЭР/BVA — валидация", () => {
+  describe("Эквивалентное разбиение/BVA — валидация", () => {
     it("возвращает 400 при name из 1 символа", async () => {
       const res = await api.patch(`/api/dishes/${dishId}`, { name: "А" });
       expect(res.status).toBe(400);
     });
 
-    it("при portionSizeGrams = 0.001 возвращает 400 из-за BJU per100g", async () => {
+    it("при portionSizeGrams = 0.001 возвращает 400 из-за БЖУ per100g", async () => {
       const res = await api.patch(`/api/dishes/${dishId}`, { portionSizeGrams: 0.001 });
 
       expect(res.status).toBe(400);

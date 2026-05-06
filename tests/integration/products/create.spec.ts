@@ -20,7 +20,7 @@ describe("POST /api/products", () => {
     return res;
   }
 
-  describe("ЭР — валидные данные", () => {
+  describe("Эквивалентное разбиение — валидные данные", () => {
     it("создаёт продукт при корректных минимальных данных", async () => {
       const res = await createProduct(VALID_PRODUCT_PAYLOAD);
 
@@ -56,7 +56,7 @@ describe("POST /api/products", () => {
     });
   });
 
-  describe("ЭР/BVA — валидация", () => {
+  describe("Эквивалентное разбиение/BVA — валидация", () => {
     it("отклоняет сумму БЖУ > 100", async () => {
       const res = await createProduct({
         ...VALID_PRODUCT_PAYLOAD,

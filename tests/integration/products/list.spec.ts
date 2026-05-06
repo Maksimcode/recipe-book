@@ -50,7 +50,7 @@ describe("GET /api/products", () => {
       expect(Array.isArray((res.body as { data: unknown[] }).data)).toBe(true);
     });
 
-    it("ЭР: search находит продукт по точному совпадению части имени", async () => {
+    it("Эквивалентное разбиение: search находит продукт по точному совпадению части имени", async () => {
       const res = await api.get<{ data: { name: string }[] }>(
         "/api/products?search=Листья",
       );
@@ -60,7 +60,7 @@ describe("GET /api/products", () => {
       expect(products.some((p) => p.name === "Листья салата")).toBe(true);
     });
 
-    it("ЭР: search по несуществующему слову возвращает пустой массив", async () => {
+    it("Эквивалентное разбиение: search по несуществующему слову возвращает пустой массив", async () => {
       const res = await api.get<{ data: unknown[] }>(
         `/api/products?search=${encodeURIComponent("НесуществующийПродуктXYZ")}`,
       );

@@ -60,7 +60,7 @@ describe("POST /api/dishes/calculate-nutrition", () => {
     };
   }
 
-  describe("ЭР — структура ответа", () => {
+  describe("Эквивалентное разбиение — структура ответа", () => {
     it("возвращает 200 и все ожидаемые поля при валидном запросе", async () => {
       const res = await api.post("/api/dishes/calculate-nutrition", calcBody());
 
@@ -73,7 +73,7 @@ describe("POST /api/dishes/calculate-nutrition", () => {
     });
   });
 
-  describe("ЭР/BVA — расчет calories", () => {
+  describe("Эквивалентное разбиение/BVA — расчет calories", () => {
     it.each([
       {
         caseName: "100 г от продукта 200 ккал/100г -> 200",
@@ -116,7 +116,7 @@ describe("POST /api/dishes/calculate-nutrition", () => {
     });
   });
 
-  describe("ЭР — поле ingredients", () => {
+  describe("Эквивалентное разбиение — поле ingredients", () => {
     it("пустой массив ingredients → 400", async () => {
       const res = await api.post(
         "/api/dishes/calculate-nutrition",
@@ -138,7 +138,7 @@ describe("POST /api/dishes/calculate-nutrition", () => {
     });
   });
 
-  describe("ЭР — flagsAvailability", () => {
+  describe("Эквивалентное разбиение — flagsAvailability", () => {
     it("один невеганский продукт → isVegan=false", async () => {
       const res = await api.post<{ data: { flagsAvailability: { isVegan: boolean } } }>(
         "/api/dishes/calculate-nutrition",
@@ -159,7 +159,7 @@ describe("POST /api/dishes/calculate-nutrition", () => {
     });
   });
 
-  describe("ЭР — определение категории из имени", () => {
+  describe("Эквивалентное разбиение — определение категории из имени", () => {
     it("макрос !суп → categoryDetectedFromMacro = SOUP", async () => {
       const res = await api.post<{ data: { categoryDetectedFromMacro: string } }>(
         "/api/dishes/calculate-nutrition",
@@ -197,7 +197,7 @@ describe("POST /api/dishes/calculate-nutrition", () => {
     });
   });
 
-  describe("ЭР — невалидный JSON и тело", () => {
+  describe("Эквивалентное разбиение — невалидный JSON и тело", () => {
     it("невалидный JSON → 400 INVALID_JSON", async () => {
       const res = await fetch(
         `${process.env.INTEGRATION_BASE_URL ?? "http://localhost:3000"}/api/dishes/calculate-nutrition`,
