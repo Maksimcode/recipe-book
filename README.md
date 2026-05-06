@@ -1,20 +1,46 @@
-В этой ветке добавлены unit-тесты для автоматического расчета калорийности блюда.
+В этой ветке добавлены интеграционные (API) тесты для системы «Книга рецептов». Тесты запускаются против реального инстанса приложения (локального или удалённого) и проверяют backend через HTTP без изоляции.
 
-Что покрыто:
+Что покрыто
+CRUD для продуктов (/api/products)
 
-функция calculateAutoNutrition в src/lib/dishes/domain.ts;
-тесты находятся в tests/unit/dishes/calculate-auto-nutrition.spec.ts.
-Что использовано по ТЗ:
+POST /api/products — tests/integration/products/create.spec.ts
+GET /api/products — tests/integration/products/list.spec.ts
+GET /api/products/:id — tests/integration/products/get.spec.ts
+PATCH /api/products/:id — tests/integration/products/update.spec.ts
+DELETE /api/products/:id — tests/integration/products/delete.spec.ts
+включая бизнес‑ограничение: нельзя удалить продукт, используемый в блюде (ожидается 409 PRODUCT_IN_USE)
+CRUD для блюд (/api/dishes)
 
-библиотека unit-тестирования: vitest;
-техники тест-дизайна:
-эквивалентное разбиение;
-анализ граничных значений.
-Дополнительно:
+POST /api/dishes — tests/integration/dishes/create.spec.ts
+GET /api/dishes — tests/integration/dishes/list.spec.ts
+GET /api/dishes/:id — tests/integration/dishes/get.spec.ts
+PATCH /api/dishes/:id — tests/integration/dishes/update.spec.ts
+DELETE /api/dishes/:id — tests/integration/dishes/delete.spec.ts
+Автоматический расчёт КБЖУ (preview)
+POST /api/dishes/calculate-nutrition — tests/integration/dishes/calculate-nutrition.spec.ts
+Проверяется корректность расчёта, валидации, доступность флагов и макросы категории.
 
-применена параметризация тестов (it.each);
-добавлены docstring-комментарии к тест-сьютам и кейсам.
-Запуск:
+Что использовано по ТЗ
+Библиотека тестирования: vitest
+Тестирование через API без изоляции: реальные HTTP‑запросы к работающему серверу
+Техники тест‑дизайна:
+эквивалентное разбиение (ЭР)
+анализ граничных значений (BVA)
+Дополнительно
+Параметризация: it.each(...)
+Setup/Teardown:
+beforeAll/afterAll для подготовки и очистки данных
+beforeEach/afterEach там, где нужен «чистый объект на тест»
+Запуск на удалённом инстансе: через переменную окружения INTEGRATION_BASE_URL (без изменения кода тестов)
+Вспомогательные модули:
+HTTP‑клиент: tests/integration/helpers/api.ts
+фикстуры: tests/integration/helpers/fixtures.ts
+конфиг интеграционных тестов: vitest.integration.config.ts
+Запуск
+Запусти сервер (в отдельной вкладке):
+npm run dev
+Запусти интеграционные тесты (в другой вкладке):
+INTEGRATION_BASE_URL=http://localhost:3000 npm run test:integration
+Запуск против удалённого инстанса:
 
-npm test
-npm run test:coverage
+INTEGRATION_BASE_URL=https://<your-remote-host> npm run test:integration
