@@ -1,51 +1,37 @@
-# API Integration Tests (Lab 3)
+## Системные UI-тесты (Playwright)
 
-В этой ветке добавлены **интеграционные (API) тесты** для системы «Книга рецептов».  
-Тесты запускаются **против реального инстанса** приложения (локального или удалённого) и проверяют backend через HTTP без изоляции.
+В ветке добавлены **end-to-end** тесты через **Playwright** против поднимаемого **`next dev`** (см. `playwright.config.ts`: перед прогоном выполняется `prisma db push`, затем сервер на `http://127.0.0.1:3000`).
 
-## Что покрыто
+### Предусловия
 
-### CRUD для продуктов (`/api/products`)
-- `POST /api/products` — `tests/integration/products/create.spec.ts`
-- `GET /api/products` — `tests/integration/products/list.spec.ts`
-- `GET /api/products/:id` — `tests/integration/products/get.spec.ts`
-- `PATCH /api/products/:id` — `tests/integration/products/update.spec.ts`
-- `DELETE /api/products/:id` — `tests/integration/products/delete.spec.ts`  
-  Включая бизнес-ограничение: **нельзя удалить продукт, используемый в блюде** (`409 PRODUCT_IN_USE`).
+- **PostgreSQL** и переменная **`DATABASE_URL`** (по умолчанию в конфиге Playwright: `postgresql://recipe:recipe@127.0.0.1:5434/recipe_book?schema=public`, порт **5434** как в `docker-compose.yml`). Обычно достаточно: `docker compose up db -d` и дождаться готовности БД.
+- Один раз установить браузеры Playwright: `npx playwright install`.
 
-### CRUD для блюд (`/api/dishes`)
-- `POST /api/dishes` — `tests/integration/dishes/create.spec.ts`
-- `GET /api/dishes` — `tests/integration/dishes/list.spec.ts`
-- `GET /api/dishes/:id` — `tests/integration/dishes/get.spec.ts`
-- `PATCH /api/dishes/:id` — `tests/integration/dishes/update.spec.ts`
-- `DELETE /api/dishes/:id` — `tests/integration/dishes/delete.spec.ts`
+Опционально: **`PLAYWRIGHT_BASE_URL`** — если задан и включён `reuseExistingServer`, можно не поднимать приложение через `webServer` (см. комментарий в `playwright.config.ts`).
 
-### Автоматический расчёт КБЖУ (preview)
-- `POST /api/dishes/calculate-nutrition` — `tests/integration/dishes/calculate-nutrition.spec.ts`  
-Проверяются: корректность расчёта, валидации, доступность флагов и макросы категории.
+### Что в `tests/e2e`
 
-## Что использовано по ТЗ
+| Файл | Содержание |
+|------|------------|
+| `navigation.spec.ts` | Дымовой сценарий: главная → продукты и блюда |
+| `products-create.spec.ts` | Создание продукта, ГЗ имени, БЖУ, BVA калорий (HTML5 `min`), лимит фото |
+| `products-workflows.spec.ts` | Список: фильтры (крупы + веган), поиск, правка, удаление (serial) |
+| `dishes-create.spec.ts` | Создание блюда (КБЖУ, категория), BVA порции (0 vs отрицательные и HTML5), ЭР пустого состава |
+| `helpers/` | API для фикстур, URL/id деталок, заполнение форм |
 
-- Библиотека тестирования: **Vitest**
-- Формат: **интеграционные/API тесты через HTTP без изоляции**
-- Техники тест-дизайна:
-  - **эквивалентное разбиение (ЭР)**
-  - **анализ граничных значений (BVA)**
+Тест-дизайн в сценариях: **ЭР**, **ГЗ**, **BVA**; где уместно — разделение **сообщения формы** и **нативной валидации HTML5** (например, порция `0` vs отрицательные при `min=0`).
 
-## Дополнительно
+### Запуск
 
-- Использована параметризация (`it.each`)
-- Использованы setup/teardown:
-  - `beforeAll/afterAll` для подготовки и очистки данных
-  - `beforeEach/afterEach` там, где нужен «чистый объект на тест»
-- Вынесены helper-модули:
-  - HTTP-клиент: `tests/integration/helpers/api.ts`
-  - фикстуры: `tests/integration/helpers/fixtures.ts`
-- Отдельный конфиг интеграционных тестов: `vitest.integration.config.ts`
-- Запуск на удалённом инстансе через `INTEGRATION_BASE_URL`
-
-## Запуск
-
-1. Запустить сервер (в отдельной вкладке):
 ```bash
-npm run dev
+npm run test:e2e          # headless, все тесты
+npm run test:e2e:ui       # интерактивный UI Playwright
+npm run test:e2e:headed   # видимый браузер
+npm run test:e2e:debug    # пошаговая отладка
+```
+
+Отчёт после прогона: `npx playwright show-report`.
+
+### Связь с Vitest
+
+**`npm run test`** (корневой `vitest.config.ts`) запускает только **`tests/unit/**`**. Интеграционные API-тесты — **`npm run test:integration`** (`vitest.integration.config.ts`). E2e **не** входят в `npm run test`, чтобы Playwright-спеки не смешивались с Vitest.
