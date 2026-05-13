@@ -227,8 +227,14 @@ export function DishForm({ mode, initial, products, onSuccess }: DishFormProps) 
   return (
     <form className="space-y-4" onSubmit={onSubmit}>
       <div className="field">
-        <label>Название</label>
-        <input required minLength={2} value={name} onChange={(e) => setName(e.target.value)} />
+        <label htmlFor="dish-form-name">Название</label>
+        <input
+          id="dish-form-name"
+          required
+          minLength={2}
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+        />
       </div>
 
       <p className="text-muted">
@@ -237,9 +243,12 @@ export function DishForm({ mode, initial, products, onSuccess }: DishFormProps) 
       </p>
 
       <div className="field">
-        <label>Фотографии (вставка из буфера, файл с компьютера, либо ссылки)</label>
+        <label htmlFor="dish-form-photo-urls">
+          Фотографии (вставка из буфера, файл с компьютера, либо ссылки)
+        </label>
         <div className="row">
           <input
+            id="dish-form-photo-file"
             type="file"
             accept="image/*"
             multiple
@@ -249,6 +258,7 @@ export function DishForm({ mode, initial, products, onSuccess }: DishFormProps) 
           <span className="text-muted">{uploading ? "Загружаем фото..." : "До 5 файлов"}</span>
         </div>
         <textarea
+          id="dish-form-photo-urls"
           rows={4}
           value={photosText}
           onChange={(e) => setPhotosText(e.target.value)}
@@ -271,8 +281,9 @@ export function DishForm({ mode, initial, products, onSuccess }: DishFormProps) 
 
       <div className="grid-2">
         <div className="field">
-          <label>Размер порции, г</label>
+          <label htmlFor="dish-form-portion">Размер порции, г</label>
           <input
+            id="dish-form-portion"
             type="number"
             min={0}
             step="0.01"
@@ -282,8 +293,8 @@ export function DishForm({ mode, initial, products, onSuccess }: DishFormProps) 
           />
         </div>
         <div className="field">
-          <label>Категория</label>
-          <select value={category} onChange={(e) => setCategory(e.target.value)}>
+          <label htmlFor="dish-form-category">Категория</label>
+          <select id="dish-form-category" value={category} onChange={(e) => setCategory(e.target.value)}>
             <option value="">Определить по макросу из названия</option>
             {dishCategoryOptions.map((item) => (
               <option key={item.value} value={item.value}>
@@ -296,8 +307,9 @@ export function DishForm({ mode, initial, products, onSuccess }: DishFormProps) 
 
       <div className="grid-2">
         <div className="field">
-          <label>Калорийность, ккал/порция</label>
+          <label htmlFor="dish-form-calories">Калорийность, ккал/порция</label>
           <input
+            id="dish-form-calories"
             type="number"
             min={0}
             step="0.01"
@@ -309,8 +321,9 @@ export function DishForm({ mode, initial, products, onSuccess }: DishFormProps) 
           />
         </div>
         <div className="field">
-          <label>Белки, г/порция</label>
+          <label htmlFor="dish-form-protein">Белки, г/порция</label>
           <input
+            id="dish-form-protein"
             type="number"
             min={0}
             step="0.01"
@@ -322,8 +335,9 @@ export function DishForm({ mode, initial, products, onSuccess }: DishFormProps) 
           />
         </div>
         <div className="field">
-          <label>Жиры, г/порция</label>
+          <label htmlFor="dish-form-fat">Жиры, г/порция</label>
           <input
+            id="dish-form-fat"
             type="number"
             min={0}
             step="0.01"
@@ -335,8 +349,9 @@ export function DishForm({ mode, initial, products, onSuccess }: DishFormProps) 
           />
         </div>
         <div className="field">
-          <label>Углеводы, г/порция</label>
+          <label htmlFor="dish-form-carbs">Углеводы, г/порция</label>
           <input
+            id="dish-form-carbs"
             type="number"
             min={0}
             step="0.01"

@@ -155,14 +155,23 @@ export function ProductForm({ mode, initial, onSuccess }: ProductFormProps) {
   return (
     <form className="space-y-4" onSubmit={onSubmit}>
       <div className="field">
-        <label>Название</label>
-        <input value={name} minLength={2} required onChange={(e) => setName(e.target.value)} />
+        <label htmlFor="product-form-name">Название</label>
+        <input
+          id="product-form-name"
+          value={name}
+          minLength={2}
+          required
+          onChange={(e) => setName(e.target.value)}
+        />
       </div>
 
       <div className="field">
-        <label>Фотографии (вставка из буфера, файл с компьютера, либо ссылки)</label>
+        <label htmlFor="product-form-photo-urls">
+          Фотографии (вставка из буфера, файл с компьютера, либо ссылки)
+        </label>
         <div className="row">
           <input
+            id="product-form-photo-file"
             type="file"
             accept="image/*"
             multiple
@@ -172,6 +181,7 @@ export function ProductForm({ mode, initial, onSuccess }: ProductFormProps) {
           <span className="text-muted">{uploading ? "Загружаем фото..." : "До 5 файлов"}</span>
         </div>
         <textarea
+          id="product-form-photo-urls"
           rows={4}
           value={photosText}
           onChange={(e) => setPhotosText(e.target.value)}
@@ -193,8 +203,9 @@ export function ProductForm({ mode, initial, onSuccess }: ProductFormProps) {
 
       <div className="grid-2">
         <div className="field">
-          <label>Калорийность, ккал/100г</label>
+          <label htmlFor="product-form-calories">Калорийность, ккал/100г</label>
           <input
+            id="product-form-calories"
             type="number"
             min={0}
             step="0.01"
@@ -204,8 +215,9 @@ export function ProductForm({ mode, initial, onSuccess }: ProductFormProps) {
           />
         </div>
         <div className="field">
-          <label>Белки, г/100г</label>
+          <label htmlFor="product-form-protein">Белки, г/100г</label>
           <input
+            id="product-form-protein"
             type="number"
             min={0}
             max={100}
@@ -216,8 +228,9 @@ export function ProductForm({ mode, initial, onSuccess }: ProductFormProps) {
           />
         </div>
         <div className="field">
-          <label>Жиры, г/100г</label>
+          <label htmlFor="product-form-fat">Жиры, г/100г</label>
           <input
+            id="product-form-fat"
             type="number"
             min={0}
             max={100}
@@ -228,8 +241,9 @@ export function ProductForm({ mode, initial, onSuccess }: ProductFormProps) {
           />
         </div>
         <div className="field">
-          <label>Углеводы, г/100г</label>
+          <label htmlFor="product-form-carbs">Углеводы, г/100г</label>
           <input
+            id="product-form-carbs"
             type="number"
             min={0}
             max={100}
@@ -244,8 +258,9 @@ export function ProductForm({ mode, initial, onSuccess }: ProductFormProps) {
       <p className={bjuSum > 100 ? "text-error" : "text-muted"}>Сумма БЖУ: {bjuSum.toFixed(2)}</p>
 
       <div className="field">
-        <label>Состав (опционально)</label>
+        <label htmlFor="product-form-composition">Состав (опционально)</label>
         <textarea
+          id="product-form-composition"
           rows={3}
           value={ingredientsComposition}
           onChange={(e) => setIngredientsComposition(e.target.value)}
@@ -254,8 +269,12 @@ export function ProductForm({ mode, initial, onSuccess }: ProductFormProps) {
 
       <div className="grid-2">
         <div className="field">
-          <label>Категория</label>
-          <select value={category} onChange={(e) => setCategory(e.target.value as typeof category)}>
+          <label htmlFor="product-form-category">Категория</label>
+          <select
+            id="product-form-category"
+            value={category}
+            onChange={(e) => setCategory(e.target.value as typeof category)}
+          >
             {productCategoryOptions.map((item) => (
               <option key={item.value} value={item.value}>
                 {item.label}
@@ -264,8 +283,9 @@ export function ProductForm({ mode, initial, onSuccess }: ProductFormProps) {
           </select>
         </div>
         <div className="field">
-          <label>Готовность</label>
+          <label htmlFor="product-form-cooking">Готовность</label>
           <select
+            id="product-form-cooking"
             value={cookingState}
             onChange={(e) => setCookingState(e.target.value as typeof cookingState)}
           >
